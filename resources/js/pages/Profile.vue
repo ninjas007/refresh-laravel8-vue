@@ -23,7 +23,8 @@ export default {
     },
     methods: {
         getUser() {
-            axios.get(`/api/users/${this.id}`).then(response => {
+            axios.get(`/api/users/${this.id}`)
+            .then(response => {
                 this.detailUser = response.data;
             })
             .catch(error => {

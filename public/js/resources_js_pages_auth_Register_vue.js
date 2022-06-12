@@ -36,6 +36,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -44,7 +47,8 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         password: '',
         csrfToken: csrfToken
-      }
+      },
+      errors: {}
     };
   },
   methods: {
@@ -52,11 +56,23 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post('/api/users', this.form).then(function (response) {
-        _this.$router.push({
-          name: 'User'
-        });
+        if (response.data.status) {
+          _this.$noty.success(response.data.message);
+
+          _this.$router.push({
+            name: 'User'
+          });
+        } else {
+          _this.$noty.error("add data failed");
+        }
       })["catch"](function (error) {
-        console.log(error);
+        response = error.response.data;
+
+        if (response.data == 422) {
+          _this.errors = error.response.data.data;
+        }
+
+        console.log(response);
       });
     }
   }
@@ -194,6 +210,12 @@ var render = function () {
                   },
                 },
               }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c("div", { staticClass: "text-warning" }, [
+                    _vm._v(_vm._s(_vm.errors.name[0])),
+                  ])
+                : _vm._e(),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -225,6 +247,12 @@ var render = function () {
                   },
                 },
               }),
+              _vm._v(" "),
+              _vm.errors.email
+                ? _c("div", { staticClass: "text-warning" }, [
+                    _vm._v(_vm._s(_vm.errors.email[0])),
+                  ])
+                : _vm._e(),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -256,6 +284,12 @@ var render = function () {
                   },
                 },
               }),
+              _vm._v(" "),
+              _vm.errors.password
+                ? _c("div", { staticClass: "text-warning" }, [
+                    _vm._v(_vm._s(_vm.errors.password[0])),
+                  ])
+                : _vm._e(),
             ]),
             _vm._v(" "),
             _c(

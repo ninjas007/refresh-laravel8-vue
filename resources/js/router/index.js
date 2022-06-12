@@ -33,6 +33,12 @@ const routes = [
         props: true
     },
     {
+        name: 'Edit',
+        path: '/user/:id',
+        component: () => import('../pages/Edit.vue'),
+        props: true
+    },
+    {
         path: '*',
         component: () => import('../pages/NotFound.vue')
     },

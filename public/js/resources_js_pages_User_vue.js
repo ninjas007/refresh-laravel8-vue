@@ -28,6 +28,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -53,6 +56,33 @@ __webpack_require__.r(__webpack_exports__);
         }
       })["catch"](function (error) {
         console.log(error);
+      });
+    },
+    deleteUser: function deleteUser(id) {
+      var _this2 = this;
+
+      if (confirm('Yakin mau dihapus?')) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]('/api/users/' + id).then(function (response) {
+          if (response.data.status) {
+            _this2.$noty.success(response.data.message);
+
+            _this2.getUsers();
+          } else {
+            _this2.$noty.error("delete data failed");
+          }
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      } else {
+        return false;
+      }
+    },
+    editUser: function editUser(id) {
+      this.$router.push({
+        name: 'Edit',
+        params: {
+          id: id
+        }
       });
     },
     profile_url: function profile_url(name) {
@@ -166,22 +196,55 @@ var render = function () {
         ]),
         _vm._v(" "),
         _c(
-          "ul",
+          "table",
+          { staticClass: "table" },
           _vm._l(_vm.users, function (user) {
-            return _c("li", [
-              _c(
-                "a",
-                {
-                  attrs: { href: "" },
-                  on: {
-                    click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.lihatUser(user.id)
+            return _c("tr", [
+              _c("td", [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.lihatUser(user.id)
+                      },
                     },
                   },
-                },
-                [_vm._v(_vm._s(user.name))]
-              ),
+                  [_vm._v(_vm._s(user.name) + " ")]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.editUser(user.id)
+                      },
+                    },
+                  },
+                  [_vm._v("Edit")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "" },
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.deleteUser(user.id)
+                      },
+                    },
+                  },
+                  [_vm._v("Delete")]
+                ),
+              ]),
             ])
           }),
           0

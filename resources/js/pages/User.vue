@@ -3,12 +3,15 @@
         <section>
             <h1>Daftar User</h1>
             <router-link :to="{ name: 'Register' }">Register</router-link>
-            <ul>
-                <li v-for="user in users">
-                    <!-- <router-link :to="profile_url(user.name)">{{ user.name }}</router-link> -->
-                    <a href="" @click.prevent="lihatUser(user.id)">{{ user.name }}</a>
-                </li>
-            </ul>
+            <table class="table">
+                <tr v-for="user in users">
+                    <td><a href="" @click.prevent="lihatUser(user.id)">{{ user.name }} </a></td>
+                    <td>
+                        <a href="" @click.prevent="editUser(user.id)">Edit</a>
+                        <a href="" @click.prevent="deleteUser(user.id)">Delete</a>
+                    </td>
+                </tr>
+            </table>
         </section>
     </div>
 </template>
@@ -38,6 +41,27 @@ export default {
             .catch(error => {
                 console.log(error);
             });
+        },
+        deleteUser(id) {
+            if (confirm('Yakin mau dihapus?')) {
+                axios.delete('/api/users/'+id)
+                .then(response => {
+                    if(response.data.status) {
+                        this.$noty.success(response.data.message);
+                        this.getUsers();
+                    } else {
+                        this.$noty.error("delete data failed")
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            } else {
+                return false;
+            }
+        },
+        editUser(id) {
+            this.$router.push({ name: 'Edit', params: { id: id } });
         },
         profile_url(name) {
             return '/user/' + name;
